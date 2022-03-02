@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.theme
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.TextFieldDefaults.textFieldColors
 import androidx.compose.material.icons.Icons
@@ -24,25 +27,30 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.runtime.internal.enableLiveLiterals
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.Role.Companion.Checkbox
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun loginPage(navController: NavController) {
+fun loginPage(navController: NavController,viewModel: MainViewModel = viewModel()) {
     val imageBitmap: ImageBitmap = ImageBitmap.imageResource(R.drawable.shenzi)
     val headPortrait: ImageBitmap = ImageBitmap.imageResource(R.drawable.name)
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf("") }
 //    val deleteIcon:ImageBitmap = ImageBitmap.imageResource(id = R.drawable.delete)
     Column {
         Box(contentAlignment = Alignment.Center) {
@@ -101,93 +109,10 @@ fun loginPage(navController: NavController) {
                 .padding(top = 30.dp)
         ) {
             Column {
-                TextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    shape = RoundedCornerShape(20.dp),
-                    label = { Text(text = "邮箱",color = Pink200) },
-                    placeholder = {
-                        Text(
-                            text = "请输入~ ",
-                            fontSize = 16.sp,
-                            color = Color.Gray
-                        )
-                    },  // 提示输入内容
-                    singleLine = true,
-                    colors = textFieldColors(
-                        backgroundColor = Color.White,
-                        disabledIndicatorColor = Pink200,
-                        unfocusedIndicatorColor = Pink200,
-                        focusedIndicatorColor = Pink200,
-                        errorIndicatorColor = Pink200,
-                        placeholderColor = Pink200,
-                        cursorColor = Pink200),
-                    modifier = Modifier
-                        .border(
-                            1.dp,
-                            Pink200,
-                            shape = RoundedCornerShape(18.dp))
-                    ,
-                    leadingIcon = {
-                        Image(
-                            imageVector = Icons.Filled.Email,
-                            contentDescription = null,
-                            modifier = Modifier.clickable(
-                                onClick = {}
-                            )
-                        )
-                    },
-                    trailingIcon = {
-                        Image(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = null
-                        )
-                    }
+                TextFieldView("邮箱",onClick = {viewModel.updateText(it)},email
                 )
-
                 Spacer(modifier = Modifier.size(10.dp))
-                TextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    shape = RoundedCornerShape(18.dp),
-                    label = { Text(text = "密码",color = Pink200) },
-                    placeholder = {
-                        Text(
-                            text = "请输入~ ",
-                            fontSize = 16.sp,
-                            color = Color.Gray
-                        )
-                    },  // 提示输入内容
-                    singleLine = true,
-                    colors = textFieldColors(
-                        backgroundColor = Color.White,
-                        disabledIndicatorColor = Pink200,
-                        unfocusedIndicatorColor = Pink200,
-                        focusedIndicatorColor = Pink200,
-                        errorIndicatorColor = Pink200,
-                        placeholderColor = Pink200,
-                        cursorColor = Pink200),
-                    modifier = Modifier.border(
-                        1.dp,
-                        Pink200,
-                        shape = RoundedCornerShape(18.dp)
-                    ),
-                    visualTransformation = PasswordVisualTransformation(),
-                    leadingIcon = {
-                        Image(
-                            imageVector = Icons.Filled.Lock,
-                            contentDescription = null,
-                            modifier = Modifier.clickable(
-                                onClick = {email = ""}
-                            )
-                        )
-                    },
-                    trailingIcon = {
-                        Image(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = null
-                        )
-                    },
+                TextPasswordEdit("密码",onClick = {viewModel.updateText(it)},password
                 )
             }
         }
@@ -223,6 +148,8 @@ fun loginPage(navController: NavController) {
                 }
             }
         }
+        Log.i("value", "email: ${email.value}")
+        Log.i("value", "password: ${password.value}")
         Box(
             contentAlignment = Alignment.Center, modifier = Modifier
                 .fillMaxWidth()
@@ -231,7 +158,7 @@ fun loginPage(navController: NavController) {
         {
             Button(
                 onClick = {navController.navigate("homePage")},
-                enabled = A(email,password),
+                enabled = A(email.value,password.value),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.width(140.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Pink200)

@@ -2,6 +2,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -24,6 +25,8 @@ fun ComposePage() {
 //        composable("third_page") { ThirdPage(navController) }
     }
 }
+
+
 
 
 
