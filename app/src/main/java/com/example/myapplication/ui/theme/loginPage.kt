@@ -51,6 +51,8 @@ fun loginPage(navController: NavController,viewModel: MainViewModel = viewModel(
     val headPortrait: ImageBitmap = ImageBitmap.imageResource(R.drawable.name)
     val password = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
+    DialogStudy(title = "test", text= "test")
 //    val deleteIcon:ImageBitmap = ImageBitmap.imageResource(id = R.drawable.delete)
     Column {
         Box(contentAlignment = Alignment.Center) {

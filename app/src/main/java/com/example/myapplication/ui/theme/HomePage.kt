@@ -1,37 +1,39 @@
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.myapplication.ui.theme.ListStudy
-import com.example.myapplication.ui.theme.Pink200
-import com.example.myapplication.ui.theme.drawerContentPage
+import com.example.myapplication.ui.theme.*
 import kotlinx.coroutines.launch
 
 
-class HomeView : ViewModel() {
-    //首页选中项的索引
-    private val _position = MutableLiveData(-1)
-
-    //动画状态
-    val animalBoolean = mutableStateOf(true)
-    var position: LiveData<Int> = _position
-
-    //选中索引数据刷新
-    var bootomType = true
-    fun positionChanged(selectedIndex: Int) {
-        _position.value = selectedIndex
-    }
-}
+//class HomeView : ViewModel() {
+//    //首页选中项的索引
+//    private val _position = MutableLiveData(-1)
+//
+//    //动画状态
+//    val animalBoolean = mutableStateOf(true)
+//    var position: LiveData<Int> = _position
+//
+//    //选中索引数据刷新
+//    var bootomType = true
+//    fun positionChanged(selectedIndex: Int) {
+//        _position.value = selectedIndex
+//    }
+//}
 
 
 @OptIn(InternalComposeApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
@@ -70,7 +72,9 @@ fun homePage(navController: NavController) {
 //        ,
 //        bottomBar = { BottomNavigationTwo(HomeView()) }
     ) {
-        ListStudy()
+        val vm: MainViewModel = viewModel()
+            ProjectList(vm)
+//        ListStudy(vm = vm)
     }
 }
 
